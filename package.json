@@ -1,13 +1,18 @@
 {
   "name": "@marekstracar/axios-cache-adapter",
   "version": "2.7.4",
-  "description": "Caching adapter for axios",
-  "homepage": "https://github.com/RasCarlito/axios-cache-adapter",
+  "description": "Caching adapter for stable version of Axios (1.x)",
+  "homepage": "https://github.com/marekstracar/axios-cache-adapter",
   "author": {
-    "name": "Carl Ogren",
-    "email": "rascarlito@gmail.com",
-    "url": "https://github.com/RasCarlito"
+    "name": "Marek Stracar",
+    "email": "marek851@protonmail.com",
+    "url": "https://github.com/marekstracar"
   },
+  "contributors": [{
+      "name": "Carl Ogren",
+      "email": "rascarlito@gmail.com",
+      "url": "https://github.com/RasCarlito"
+  }],
   "files": [
     "/dist",
     "/src",
@@ -37,7 +42,7 @@
     "test": "NODE_ENV=test karma start karma.conf.js",
     "watch": "NODE_WATCH=true npm test"
   },
-  "repository": "https://github.com/RasCarlito/axios-cache-adapter",
+  "repository": "https://github.com/marekstracar/axios-cache-adapter",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.1.2",

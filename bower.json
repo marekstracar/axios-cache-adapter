@@ -1,9 +1,9 @@
 {
   "name": "axios-cache-adapter",
-  "version": "2.7.3",
-  "homepage": "https://github.com/RasCarlito/axios-cache-adapter",
+  "version": "2.7.4",
+  "homepage": "https://github.com/marekstracar/axios-cache-adapter",
   "authors": [
-    "Carl Ogren <rascarlito@gmail.com>"
+    "Marek Stracar <marek851@protonmail.com>"
   ],
   "description": "Caching adapter for axios",
   "main": "dist/cache.js",
