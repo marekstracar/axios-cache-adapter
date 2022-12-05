@@ -3,4 +3,6 @@ bower_components
 coverage
 package-lock.json
 .vscode
+.idea
 yarn.lock
+dist
