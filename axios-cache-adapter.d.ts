@@ -21,7 +21,7 @@ declare module 'axios'
 }
 
 /**
- * configure how the cached requests will be handled, where they will be stored, etc.
+ * Configure how the cached requests will be handled, where they will be stored, etc.
  */
 export interface IAxiosCacheAdapterOptions
 {
@@ -46,7 +46,7 @@ export interface IAxiosCacheAdapterOptions
 	 */
 	key?(req: AxiosRequestConfig): string;
 	/**
-	 * {Function} Invalidate stored cache. By default will remove cache when
+	 * {Function} Invalidate stored cache. By default, will remove cache when
 	 * making a `POST`, `PUT`, `PATCH` or `DELETE` query.
 	 */
 	invalidate?(cfg: IAxiosCacheAdapterOptions, req: AxiosRequestConfig): Promise<void>;
@@ -105,6 +105,18 @@ export interface IAxiosCacheAdapterOptions
 	debug?: Function | boolean;
 
   excludeFromCache?: boolean;
+  /**
+   * {TAxiosCacheOptionGroups} Contains an array of the caching groups.
+   */
+  groups?: TAxiosCacheGroupsLabels;
+  /**
+   * {TAxiosCacheGroupsLabels} Determines which groups should be invalidated.
+   */
+  invalidateGroups?: TAxiosCacheGroupsLabels | true;
+  /**
+   * {boolean} Determine if the caching should be used, when network error occurs.
+   */
+  useOnNetworkError?: boolean;
 }
 
 export interface ISetupCache
@@ -149,3 +161,13 @@ export interface IAxiosCacheAdapterRequest
 	 */
 	excludedFromCache?: boolean,
 }
+
+/**
+ * Defines a label that is stored in cache.
+ */
+export type TAxiosCacheGroupLabel = string;
+
+/**
+ * Defines an array of labels that are stored in cache.
+ */
+export type TAxiosCacheGroupsLabels = TAxiosCacheGroupLabel[];
