@@ -79,7 +79,7 @@ const build = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename,
-    library: 'axiosCacheAdapter',
+    library: '@marekstracar/axiosCacheAdapter',
     libraryTarget: 'umd'
   },
   mode,
