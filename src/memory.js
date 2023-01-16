@@ -1,37 +1,37 @@
-import { mapObject } from './utilities'
+import { mapObject } from './utilities';
 
 class MemoryStore {
-  constructor () {
-    this.store = {}
-  }
+    constructor () {
+        this.store = {};
+    }
 
-  async getItem (key) {
-    const item = this.store[key] || null
+    async getItem (key) {
+        const item = this.store[key] || null;
 
-    return JSON.parse(item)
-  }
+        return JSON.parse(item);
+    }
 
-  async setItem (key, value) {
-    this.store[key] = JSON.stringify(value)
+    async setItem (key, value) {
+        this.store[key] = JSON.stringify(value);
 
-    return value
-  }
+        return value;
+    }
 
-  async removeItem (key) {
-    delete this.store[key]
-  }
+    async removeItem (key) {
+        delete this.store[key];
+    }
 
-  async clear () {
-    this.store = {}
-  }
+    async clear () {
+        this.store = {};
+    }
 
-  async length () {
-    return Object.keys(this.store).length
-  }
+    async length () {
+        return Object.keys(this.store).length;
+    }
 
-  iterate (fn) {
-    return Promise.all(mapObject(this.store, fn))
-  }
+    iterate (fn) {
+        return Promise.all(mapObject(this.store, fn));
+    }
 }
 
-export default MemoryStore
+export default MemoryStore;

@@ -1,42 +1,42 @@
-import { isObject } from './utilities'
+import { isObject } from './utilities';
 
 function exclude (config = {}, req) {
-  const { exclude = {}, debug } = config
-  const method = req.method.toLowerCase()
+    const { exclude = {}, debug } = config;
+    const method = req.method.toLowerCase();
 
-  if (method === 'head' || exclude.methods.includes(method)) {
-    debug(`Excluding request by HTTP method ${req.url}`)
+    if (method === 'head' || exclude.methods.includes(method)) {
+        debug(`Excluding request by HTTP method ${req.url}`);
 
-    return true
-  }
+        return true;
+    }
 
-  if ((typeof exclude.filter === 'function') && exclude.filter(req)) {
-    debug(`Excluding request by filter ${req.url}`)
+    if ((typeof exclude.filter === 'function') && exclude.filter(req)) {
+        debug(`Excluding request by filter ${req.url}`);
 
-    return true
-  }
+        return true;
+    }
 
-  // do not cache request with query
-  const hasQueryParams = /\?.*$/.test(req.url) ||
+    // do not cache request with query
+    const hasQueryParams = /\?.*$/.test(req.url) ||
     (isObject(req.params) && Object.keys(req.params).length !== 0) ||
-    (typeof URLSearchParams !== 'undefined' && req.params instanceof URLSearchParams)
+    (typeof URLSearchParams !== 'undefined' && req.params instanceof URLSearchParams);
 
-  if (exclude.query && hasQueryParams) {
-    debug(`Excluding request by query ${req.url}`)
+    if (exclude.query && hasQueryParams) {
+        debug(`Excluding request by query ${req.url}`);
 
-    return true
-  }
+        return true;
+    }
 
-  const paths = exclude.paths || []
-  const found = paths.some(regexp => req.url.match(regexp))
+    const paths = exclude.paths || [];
+    const found = paths.some(regexp => req.url.match(regexp));
 
-  if (found) {
-    debug(`Excluding request by url match ${req.url}`)
+    if (found) {
+        debug(`Excluding request by url match ${req.url}`);
 
-    return true
-  }
+        return true;
+    }
 
-  return false
+    return false;
 }
 
-export default exclude
+export default exclude;

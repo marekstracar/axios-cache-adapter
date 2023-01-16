@@ -3784,10 +3784,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es6_object_to_string_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_object_to_string_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_es6_array_iterator_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es6.array.iterator.js */ "./node_modules/core-js/modules/es6.array.iterator.js");
 /* harmony import */ var core_js_modules_es6_array_iterator_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_array_iterator_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "axios");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _memory__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./memory */ "./src/memory.js");
-/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./cache */ "./src/cache.js");
+/* harmony import */ var _memory__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./memory */ "./src/memory.js");
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./cache */ "./src/cache.js");
 
 
 
@@ -3799,7 +3797,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-
 
 
 var noop = function noop() {};
@@ -3824,7 +3821,6 @@ var defaults = {
       filter: null,
       methods: ['post', 'patch', 'put', 'delete']
     },
-    adapter: axios__WEBPACK_IMPORTED_MODULE_5___default.a.defaults.adapter,
     clearOnStale: true,
     clearOnError: true,
     readOnError: false,
@@ -3856,8 +3852,8 @@ var makeConfig = function makeConfig() {
   });
 
   // Create a cache key method
-  config.key = Object(_cache__WEBPACK_IMPORTED_MODULE_7__["key"])(config);
-  config.invalidate = Object(_cache__WEBPACK_IMPORTED_MODULE_7__["invalidate"])(config);
+  config.key = Object(_cache__WEBPACK_IMPORTED_MODULE_6__["key"])(config);
+  config.invalidate = Object(_cache__WEBPACK_IMPORTED_MODULE_6__["invalidate"])(config);
   // If debug mode is on, create a simple logger method
   if (config.debug !== false) {
     config.debug = typeof config.debug === 'function' ? config.debug : debug;
@@ -3866,7 +3862,7 @@ var makeConfig = function makeConfig() {
   }
 
   // Create an in memory store if none was given
-  if (!config.store) config.store = new _memory__WEBPACK_IMPORTED_MODULE_6__["default"]();
+  if (!config.store) config.store = new _memory__WEBPACK_IMPORTED_MODULE_5__["default"]();
   config.debug('Global cache config', config);
   return config;
 };
@@ -3899,7 +3895,7 @@ var mergeRequestConfig = function mergeRequestConfig(config, req) {
 
   // Create a cache key method
   if (requestConfig.key) {
-    mergedConfig.key = Object(_cache__WEBPACK_IMPORTED_MODULE_7__["key"])(requestConfig);
+    mergedConfig.key = Object(_cache__WEBPACK_IMPORTED_MODULE_6__["key"])(requestConfig);
   }
 
   // Generate request UUID
