@@ -1,4 +1,4 @@
-# :rocket: axios-cache-adapter [![Build Status](https://travis-ci.org/RasCarlito/axios-cache-adapter.svg?branch=master)](https://travis-ci.org/RasCarlito/axios-cache-adapter) [![codecov](https://codecov.io/gh/RasCarlito/axios-cache-adapter/branch/master/graph/badge.svg)](https://codecov.io/gh/RasCarlito/axios-cache-adapter) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+# :rocket: axios-cache-adapter
 
 > Caching adapter for the stable axios version (1.x). Store request results in a configurable store to prevent unneeded network requests.
 
@@ -7,19 +7,13 @@
 Using npm
 
 ```sh
-npm install --save axios-cache-adapter
-```
-
-Or bower
-
-```sh
-bower install --save axios-cache-adapter
+npm install @marekstracar/axios-cache-adapter
 ```
 
 Or from a CDN like unpkg.com
 
 ```html
-<script type="text/javascript" src="https://unpkg.com/axios-cache-adapter"></script>
+<script type="text/javascript" src="https://unpkg.com/@marekstracar/axios-cache-adapter"></script>
 ```
 
 ## Usage
@@ -33,7 +27,7 @@ You can instantiate the `axios-cache-adapter` on its own using the `setupCache()
 ```js
 // Import dependencies
 import axios from 'axios'
-import { setupCache } from 'axios-cache-adapter'
+import { setupCache } from '@marekstracar/axios-cache-adapter'
 
 // Create `axios-cache-adapter` instance
 const cache = setupCache({
@@ -66,7 +60,7 @@ You can use the `setup()` method to get an instance of `axios` pre-configured wi
 
 ```js
 // Import dependencies
-import { setup } from 'axios-cache-adapter'
+import { setup } from '@marekstracar/axios-cache-adapter'
 
 // Create `axios` instance with pre-configured `axios-cache-adapter` attached to it
 const api = setup({
@@ -96,7 +90,7 @@ api.get('/url').then(async (response) => {
 After setting up `axios-cache-adapter` with a specific cache configuration you can override parts of that configuration on individual requests.
 
 ```js
-import { setup } from 'axios-cache-adapter'
+import { setup } from '@marekstracar/axios-cache-adapter'
 
 const api = setup({
   baseURL: 'https://httpbin.org',
@@ -130,7 +124,7 @@ _Note: Not all instance options can be overridden per request, see the API docum
 You can allow `axios-cache-adapter` to cache the results of a request using (almost) any HTTP method by modifying the `exclude.methods` list.
 
 ```js
-import { setup } from 'axios-cache-adapter
+import { setup } from '@marekstracar/axios-cache-adapter'
 
 const api = setup({
   baseURL: 'https://httpbin.org',
@@ -159,7 +153,7 @@ _Note: This only works client-side because `localforage` does not work in Node.j
 ```js
 import localforage from 'localforage'
 import memoryDriver from 'localforage-memoryStorageDriver'
-import { setup } from 'axios-cache-adapter'
+import { setup } from '@marekstracar/axios-cache-adapter'
 
 // `async` wrapper to configure `localforage` and instantiate `axios` with `axios-cache-adapter`
 async function configure () {
@@ -235,7 +229,7 @@ You can give a `RedisDefaultStore` instance to `axios-cache-adapter` which will 
 _Note: This only works server-side_
 
 ```js
-const { setup, RedisDefaultStore } = require('axios-cache-adapter')
+const { setup, RedisDefaultStore } = require('@marekstracar/axios-cache-adapter')
 const redis = require('redis')
 
 const client = redis.createClient({
@@ -264,7 +258,7 @@ When a response is served from cache a custom `response.request` object is creat
 ```js
 // Import dependencies
 import assert from 'assert'
-import { setup } from 'axios-cache-adapter'
+import { setup } from '@marekstracar/axios-cache-adapter'
 
 // Create `axios` instance with pre-configured `axios-cache-adapter`
 const api = setup({
@@ -301,7 +295,7 @@ You can tell `axios-cache-adapter` to read stale cache data when a network error
 By default `axios-cache-adapter` clears stale cache data automatically, this would conflict with activating the `readOnError` option, so the `clearOnStale` option should be set to `false`.
 
 ```js
-import { setup } from 'axios-cache-adapter'
+import { setup } from '@marekstracar/axios-cache-adapter'
 
 const api = setup({
   cache: {
@@ -352,7 +346,7 @@ async function defaultInvalidate (config, request) {
 You can customize how `axios-cache-adapter` invalidates stored cache entries by providing a custom `invalidate` function.
 
 ```js
-import { setup } from 'axios-cache-adapter'
+import { setup } from '@marekstracar/axios-cache-adapter'
 
 // Create cached axios instance with custom invalidate method
 const api = setup({
@@ -386,7 +380,7 @@ When you set the `readHeaders` option to `true`, the adapter will try to read `c
 
 ```js
 import assert from 'assert'
-import { setup } from 'axios-cache-adapter'
+import { setup } from '@marekstracar/axios-cache-adapter'
 
 const api = setup({
   cache: {
@@ -576,14 +570,6 @@ To launch tests in watch mode in Chrome for easier debugging with devtools:
 ```sh
 npm run watch
 ```
-
-## Browser vs Node.js
-
-`axios-cache-adapter` was designed to run in the browser. It does work in nodejs using the [in memory store](https://github.com/RasCarlito/axios-cache-adapter/blob/master/src/memory.js). But storing data in memory is not the greatests idea ever.
-
-You can give a `store` to override the in memory store but it has to comply with the [`localForage`](https://github.com/localForage/localForage) API and `localForage` does not work in nodejs for very good reasons that are better explained in [this issue](https://github.com/localForage/localForage/issues/57).
-
-The better choice if you want to use `axios-cache-adapter` server-side is to use a redis server with a `RedisStore` instance as explained above in the API section.
 
 ## License
 

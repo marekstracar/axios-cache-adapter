@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 import MemoryStore from './memory'
 import { key, invalidate } from './cache'
 
@@ -18,7 +20,7 @@ const defaults = {
       filter: null,
       methods: ['post', 'patch', 'put', 'delete']
     },
-    adapter: require('axios/lib/adapters/http'),
+    adapter: axios.defaults.adapter,
     clearOnStale: true,
     clearOnError: true,
     readOnError: false,
