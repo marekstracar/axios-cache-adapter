@@ -1,4 +1,4 @@
-import { mapObject } from './utilities';
+import { mapObject } from './utilities.js';
 
 class MemoryStore {
     constructor () {

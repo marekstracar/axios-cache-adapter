@@ -1,6 +1,6 @@
-import response from './response';
-import exclude from './exclude';
-import { read } from './cache';
+import response from './response.js';
+import exclude from './exclude.js';
+import { read } from './cache.js';
 
 async function request (config, req) {
     config.debug('uuid', config.uuid);

@@ -1,6 +1,6 @@
-import limit from './limit';
-import { write } from './cache';
-import { parse } from 'cache-control-esm';
+import limit from './limit.js';
+import { write } from './cache.js';
+import { parse } from '@tusbar/cache-control';
 
 async function response (config, req, res) {
     const { request = {}, headers = {} } = res;

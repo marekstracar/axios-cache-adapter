@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import request from './request';
-import { serializeQuery } from './cache';
-import { defaults, makeConfig, mergeRequestConfig } from './config';
-import { isFunction } from './utilities';
+import request from './request.js';
+import { serializeQuery } from './cache.js';
+import { defaults, makeConfig, mergeRequestConfig } from './config.js';
+import { isFunction } from './utilities.js';
 
 /**
  * Configure cache adapter
@@ -17,7 +17,7 @@ function setupCache (config = {}) {
 
     // Axios adapter. Receives the axios request configuration as only parameter
     async function adapter (req) {
-    // Merge the per-request config with the instance config.
+        // Merge the per-request config with the instance config.
         const reqConfig = mergeRequestConfig(config, req);
 
         // Execute request against local cache
@@ -25,14 +25,18 @@ function setupCache (config = {}) {
         const next = res.next;
 
         // Response is not function, something was in cache, return it
-        if (!isFunction(next)) return next;
+        if (!isFunction(next)) return {
+            ...next,
+            cached: true
+        };
 
         // Nothing in cache so we execute the default adapter or any given adapter
         // Will throw if the request has a status different than 2xx
         let networkError;
 
         try {
-            res = await reqConfig.adapter(req);
+            res = await reqConfig.adapter(reqConfig, req);
+            res.cached = false;
         } catch (err) {
             networkError = err;
         }

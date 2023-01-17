@@ -1,4 +1,4 @@
-import { isObject } from './utilities';
+import { isObject } from './utilities.js';
 
 function exclude (config = {}, req) {
     const { exclude = {}, debug } = config;

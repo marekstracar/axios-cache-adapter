@@ -1,7 +1,7 @@
-import { isString, isFunction } from './utilities';
+import { isString, isFunction } from './utilities.js';
 import md5 from 'md5';
 
-import serialize from './serialize';
+import serialize from './serialize.js';
 
 async function write (config, req, res) {
     try {

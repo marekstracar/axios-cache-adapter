@@ -1,6 +1,6 @@
-import { promisify } from 'util';
+import { promisify } from 'util.js';
 
-import { mapObject } from './utilities';
+import { mapObject } from './utilities.js';
 
 class RedisStore {
     constructor (client, HASH_KEY = 'axios-cache') {

@@ -1,5 +1,7 @@
-import MemoryStore from './memory';
-import { key, invalidate } from './cache';
+import MemoryStore from './memory.js';
+import { key, invalidate } from './cache.js';
+import Axios from 'axios';
+
 
 const noop = () => {};
 const debug = (...args) => console.log('[axios-cache-adapter]', ...args);
@@ -23,7 +25,15 @@ const defaults = {
         readOnError: false,
         readHeaders: false,
         debug: false,
-        ignoreCache: false
+        ignoreCache: false,
+        adapter: async (config, requestData) => {
+            const { method, url, ...rest } = requestData;
+            const { baseURL } = config;
+
+            const api = Axios.create({...rest, baseURL, adapter: Axios.defaults.adapter});
+
+            return api[method](url);
+        }
     },
 
     // Additional defaults when creating the axios instance with the cache adapter.

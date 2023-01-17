@@ -1,99 +1,82 @@
 // Karma configuration
-const webpackConfig = require('./webpack.config')
+const webpackConfig = require('./webpack.config');
 
-process.env.CHROME_BIN = require('puppeteer').executablePath()
+process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 // explained at http://mike-ward.net/2015/09/07/tips-on-setting-up-karma-testing-with-webpack/
-webpackConfig.entry = ''
+webpackConfig.entry = '';
 
 module.exports = function (config) {
-  config.set({
+    config.set({
 
-    // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '.',
+        // base path that will be used to resolve all patterns (eg. files, exclude)
+        basePath: '.',
 
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha'],
+        // frameworks to use
+        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+        frameworks: ['mocha'],
 
-    // list of files / patterns to load in the browser
-    files: [
-      'test/main.js'
-    ],
+        // list of files / patterns to load in the browser
+        files: [
+            'test/main.js'
+        ],
 
-    // list of files to exclude
-    exclude: [
-    ],
+        // list of files to exclude
+        exclude: [
+        ],
 
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-      'test/main.js': ['webpack', 'sourcemap']
-    },
+        // preprocess matching files before serving them to the browser
+        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+        preprocessors: {
+            'test/main.js': ['webpack', 'sourcemap']
+        },
 
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha', 'coverage-istanbul'],
+        // test results reporter to use
+        // possible values: 'dots', 'progress'
+        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+        reporters: ['mocha', 'coverage-istanbul'],
 
-    webpackServer: {
-      noInfo: true // please don't spam the console when running in karma!
-    },
+        webpackServer: {
+            noInfo: true // please don't spam the console when running in karma!
+        },
 
-    // web server port
-    port: 9876,
+        // web server port
+        port: 9876,
 
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
+        // enable / disable colors in the output (reporters and logs)
+        colors: true,
 
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+        // level of logging
+        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+        logLevel: config.LOG_INFO,
 
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+        // enable / disable watching file and executing tests whenever any file changes
+        autoWatch: true,
 
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: process.env.NODE_WATCH ? ['Chrome'] : ['ChromeHeadlessNoSandbox'],
+        // start these browsers
+        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+        browsers: process.env.NODE_WATCH ? ['Chrome'] : ['ChromeHeadlessNoSandbox'],
 
-    customLaunchers: {
-      ChromeHeadlessNoSandbox: {
-        base: 'ChromeHeadless',
-        flags: ['--no-sandbox']
-      }
-    },
+        customLaunchers: {
+            ChromeHeadlessNoSandbox: {
+                base: 'ChromeHeadless',
+                flags: ['--no-sandbox']
+            }
+        },
 
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
-    singleRun: !process.env.NODE_WATCH,
+        // Continuous Integration mode
+        // if true, Karma captures browsers, runs the tests and exits
+        singleRun: !process.env.NODE_WATCH,
 
-    // Concurrency level
-    // how many browser should be started simultaneous
-    concurrency: Infinity,
+        // Concurrency level
+        // how many browser should be started simultaneous
+        concurrency: Infinity,
 
-    webpack: webpackConfig,
+        webpack: webpackConfig,
 
-    // htmlReporter: {
-    //   outputDir: 'test-reports', // where to put the reports
-    //   namedFiles: true // name files instead of creating sub-directories
-    // },
-
-    coverageIstanbulReporter: {
-      reports: ['html', 'lcovonly', 'text-summary'],
-      fixWebpackSourcePaths: true
-    }
-
-    // options for code coverage karma plugin
-    // coverageReporter: {
-    //   // type: 'html', // produces a html document after code is run
-    //   // dir: 'coverage/' // path to created html doc
-    //   reporters: [
-    //     // generates ./coverage/lcov.info
-    //     { type: 'lcovonly', subdir: '.' },
-    //     // generates ./coverage/coverage-final.json
-    //     { type: 'json', subdir: '.' }
-    //   ]
-    // }
-  })
-}
+        coverageIstanbulReporter: {
+            reports: ['html', 'lcovonly', 'text-summary'],
+            fixWebpackSourcePaths: true
+        }
+    });
+};
