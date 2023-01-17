@@ -1,146 +1,146 @@
 /* globals describe it beforeEach */
 
-import assert from 'assert'
-import isString from 'lodash/isString'
-import isFunction from 'lodash/isFunction'
+import assert from 'assert';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
-import cache from 'src/cache'
-import MemoryStore from 'src/memory'
+import cache from 'src/cache';
+import MemoryStore from 'src/memory';
 
 describe('Cache store', () => {
-  const debug = () => {}
-  // const debug = (...args) => { console.log(...args) }
+    const debug = () => {};
+    // const debug = (...args) => { console.log(...args) }
 
-  let uuid
-  let expires
-  let store
-  let config
-  let req
-  let res
+    let uuid;
+    let expires;
+    let store;
+    let config;
+    let req;
+    let res;
 
-  beforeEach(() => {
-    uuid = 'test'
-    expires = Date.now()
-    store = new MemoryStore()
+    beforeEach(() => {
+        uuid = 'test';
+        expires = Date.now();
+        store = new MemoryStore();
 
-    config = { uuid, store, expires, debug }
-    req = {}
-    res = { data: { youhou: true }, request: { fake: true }, config }
-  })
+        config = { uuid, store, expires, debug };
+        req = {};
+        res = { data: { youhou: true }, request: { fake: true }, config };
+    });
 
-  it('Should expose a public API', () => {
-    assert.ok(isFunction(cache.write))
-    assert.ok(isFunction(cache.read))
-    assert.ok(isFunction(cache.key))
-  })
+    it('Should expose a public API', () => {
+        assert.ok(isFunction(cache.write));
+        assert.ok(isFunction(cache.read));
+        assert.ok(isFunction(cache.key));
+    });
 
-  it('Should write to cache', async () => {
-    let cacheResult = await cache.write(config, req, res)
+    it('Should write to cache', async () => {
+        let cacheResult = await cache.write(config, req, res);
 
-    assert.ok(cacheResult)
+        assert.ok(cacheResult);
 
-    assert.ok(isString(store.store.test))
+        assert.ok(isString(store.store.test));
 
-    const storedData = JSON.parse(store.store.test)
+        const storedData = JSON.parse(store.store.test);
 
-    assert.strictEqual(storedData.expires, expires)
-    assert.ok(storedData.data.data.youhou)
+        assert.strictEqual(storedData.expires, expires);
+        assert.ok(storedData.data.data.youhou);
 
-    store.setItem = async () => {
-      throw new Error('Faking store error')
-    }
+        store.setItem = async () => {
+            throw new Error('Faking store error');
+        };
 
-    cacheResult = await cache.write(config, req, res)
+        cacheResult = await cache.write(config, req, res);
 
-    assert.strictEqual(cacheResult, false)
-  })
+        assert.strictEqual(cacheResult, false);
+    });
 
-  it('Should clear cache if a store error occurs and clearOnError option is activated', async () => {
-    config.clearOnError = true
+    it('Should clear cache if a store error occurs and clearOnError option is activated', async () => {
+        config.clearOnError = true;
 
-    let cacheResult = await cache.write(config, req, res)
+        let cacheResult = await cache.write(config, req, res);
 
-    assert.ok(cacheResult)
+        assert.ok(cacheResult);
 
-    store.setItem = async () => {
-      throw new Error('Faking store error')
-    }
+        store.setItem = async () => {
+            throw new Error('Faking store error');
+        };
 
-    cacheResult = await cache.write(config, req, res)
+        cacheResult = await cache.write(config, req, res);
 
-    assert.strictEqual(cacheResult, false)
+        assert.strictEqual(cacheResult, false);
 
-    const length = await store.length()
+        const length = await store.length();
 
-    assert.strictEqual(length, 0)
-  })
+        assert.strictEqual(length, 0);
+    });
 
-  it('Should throw when unable to clear cache after a store error occurs', async () => {
-    config.clearOnError = true
+    it('Should throw when unable to clear cache after a store error occurs', async () => {
+        config.clearOnError = true;
 
-    let cacheResult = await cache.write(config, req, res)
+        let cacheResult = await cache.write(config, req, res);
 
-    assert.ok(cacheResult)
+        assert.ok(cacheResult);
 
-    store.setItem = async () => {
-      throw new Error('Faking store error')
-    }
-    store.clear = async () => {
-      throw new Error('Faking store error')
-    }
+        store.setItem = async () => {
+            throw new Error('Faking store error');
+        };
+        store.clear = async () => {
+            throw new Error('Faking store error');
+        };
 
-    cacheResult = await cache.write(config, req, res)
+        cacheResult = await cache.write(config, req, res);
 
-    assert.strictEqual(cacheResult, false)
-  })
+        assert.strictEqual(cacheResult, false);
+    });
 
-  it('Should read from cache', async () => {
-    try {
-      await cache.read(config, req)
-    } catch (err) {
-      assert.strictEqual(err.reason, 'cache-miss')
-    }
+    it('Should read from cache', async () => {
+        try {
+            await cache.read(config, req);
+        } catch (err) {
+            assert.strictEqual(err.reason, 'cache-miss');
+        }
 
-    await cache.write(config, req, res)
+        await cache.write(config, req, res);
 
-    try {
-      await cache.read(config, req)
-    } catch (err) {
-      assert.strictEqual(err.reason, 'cache-stale')
-    }
+        try {
+            await cache.read(config, req);
+        } catch (err) {
+            assert.strictEqual(err.reason, 'cache-stale');
+        }
 
-    config.expires = Date.now() + (15 * 60 * 1000) // Add 15min to cache expiry date
+        config.expires = Date.now() + (15 * 60 * 1000); // Add 15min to cache expiry date
 
-    await cache.write(config, req, res)
+        await cache.write(config, req, res);
 
-    const cacheData = await cache.read(config, req)
+        const cacheData = await cache.read(config, req);
 
-    assert.ok(cacheData.data.youhou)
-  })
+        assert.ok(cacheData.data.youhou);
+    });
 
-  it('Should ignore cache', async () => {
-    await cache.write(config, req, res)
-    config.ignoreCache = true
-    try {
-      await cache.read(config, req)
-    } catch (err) {
-      assert.strictEqual(err.reason, 'cache-miss')
-    }
-  })
+    it('Should ignore cache', async () => {
+        await cache.write(config, req, res);
+        config.ignoreCache = true;
+        try {
+            await cache.read(config, req);
+        } catch (err) {
+            assert.strictEqual(err.reason, 'cache-miss');
+        }
+    });
 
-  it('Should generate a cache key', () => {
-    const expected = function key () {}
+    it('Should generate a cache key', () => {
+        const expected = function key () {};
 
-    assert.deepStrictEqual(cache.key({ key: expected }), expected)
+        assert.deepStrictEqual(cache.key({ key: expected }), expected);
 
-    let cacheKey = cache.key({ key: 'my-key' })
+        let cacheKey = cache.key({ key: 'my-key' });
 
-    assert.ok(isFunction(cacheKey))
-    assert.strictEqual(cacheKey({ url: 'https://httpbin.org/' }), 'my-key/https://httpbin.org/')
+        assert.ok(isFunction(cacheKey));
+        assert.strictEqual(cacheKey({ url: 'https://httpbin.org/' }), 'my-key/https://httpbin.org/');
 
-    cacheKey = cache.key({})
+        cacheKey = cache.key({});
 
-    assert.ok(isFunction(cacheKey))
-    assert.strictEqual(cacheKey({ url: 'https://httpbin.org/' }), 'https://httpbin.org/')
-  })
-})
+        assert.ok(isFunction(cacheKey));
+        assert.strictEqual(cacheKey({ url: 'https://httpbin.org/' }), 'https://httpbin.org/');
+    });
+});

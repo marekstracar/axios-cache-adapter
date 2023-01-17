@@ -1,4 +1,4 @@
-import { promisify } from 'util.js';
+import { promisify } from 'util';
 
 import { mapObject } from './utilities.js';
 

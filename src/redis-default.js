@@ -1,4 +1,4 @@
-import { promisify } from 'util.js';
+import { promisify } from 'util';
 
 class RedisDefaultStore {
     constructor (client, options = {}) {

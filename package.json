@@ -1,6 +1,6 @@
 {
     "name": "@marekstracar/axios-cache-adapter",
-    "version": "2.8.0",
+    "version": "2.8.1",
     "description": "Caching adapter for stable version of Axios (1.x)",
     "homepage": "https://github.com/marekstracar/axios-cache-adapter",
     "author": {
@@ -25,24 +25,23 @@
     "browser": "dist/cache.js",
     "types": "axios-cache-adapter.d.ts",
     "runkitExampleFilename": "examples/basic.js",
+    "exclude": [
+        "node_modules",
+        "karma.conf.cjs",
+        "webpack.config.cjs"
+    ],
     "keywords": [
         "axios",
         "cache",
         "xhr",
         "request"
     ],
-    "standard": {
-        "ignore": [
-            "/dist",
-            "/examples"
-        ]
-    },
     "scripts": {
         "clean": "rimraf dist",
         "lint": "eslint",
         "lint-fix": "eslint --fix src/**/*.js test/**/*.js",
-        "build": "npm run clean && webpack && NODE_ENV=production webpack && NODE_BUILD_FOR=node webpack && NODE_ENV=production NODE_BUILD_FOR=node webpack",
-        "test": "NODE_ENV=test karma start karma.conf.js",
+        "build": "npm run clean && webpack --config webpack.config.cjs && NODE_ENV=production webpack --config webpack.config.cjs && NODE_BUILD_FOR=node webpack --config webpack.config.cjs && NODE_ENV=production NODE_BUILD_FOR=node webpack --config webpack.config.cjs",
+        "test": "NODE_ENV=test karma start karma.conf.cjs",
         "watch": "NODE_WATCH=true npm test"
     },
     "repository": "https://github.com/marekstracar/axios-cache-adapter",

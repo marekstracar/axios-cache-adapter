@@ -1,103 +1,103 @@
 /* globals describe it beforeEach */
 
-import assert from 'assert'
-import { isFunction } from 'lodash'
+import assert from 'assert';
+import { isFunction } from 'lodash';
 
-import request from 'src/request'
-import { key, invalidate } from 'src/cache'
-import MemoryStore from 'src/memory'
+import request from 'src/request';
+import { key, invalidate } from 'src/cache';
+import MemoryStore from 'src/memory';
 describe('Request', () => {
-  const debug = () => {}
-  // const debug = (...args) => { console.log(...args) }
-  let config
-  let req
-  let res
-  // let expires
-  let store
-  const methods = ['post', 'patch', 'put', 'delete']
+    const debug = () => {};
+    // const debug = (...args) => { console.log(...args) }
+    let config;
+    let req;
+    let res;
+    // let expires
+    let store;
+    const methods = ['post', 'patch', 'put', 'delete'];
 
-  beforeEach(() => {
+    beforeEach(() => {
     // expires = Date.now()
-    store = new MemoryStore()
+        store = new MemoryStore();
 
-    config = {
-      key: key('test'),
-      store,
-      debug,
-      invalidate: invalidate(),
-      exclude: { methods }
-    }
+        config = {
+            key: key('test'),
+            store,
+            debug,
+            invalidate: invalidate(),
+            exclude: { methods }
+        };
 
-    req = {
-      url: 'https://httpbin.org/',
-      method: 'GET'
-    }
+        req = {
+            url: 'https://httpbin.org/',
+            method: 'GET'
+        };
 
-    config.uuid = config.key(req)
+        config.uuid = config.key(req);
 
-    res = { data: { youhou: true }, request: { fake: true }, config }
-  })
+        res = { data: { youhou: true }, request: { fake: true }, config };
+    });
 
-  it('Should export a function', () => {
-    assert.ok(isFunction(request))
-  })
+    it('Should export a function', () => {
+        assert.ok(isFunction(request));
+    });
 
-  it('Should notify an exclusion if url matches exclude params', async () => {
+    it('Should notify an exclusion if url matches exclude params', async () => {
     // Exclude everything
-    config.exclude.paths = [/.+/]
+        config.exclude.paths = [/.+/];
 
-    const result = await request(config, req)
+        const result = await request(config, req);
 
-    testExclusion(result)
-  })
+        testExclusion(result);
+    });
 
-  it('Should notify an exclusion for http head method', async () => {
-    req.method = 'HEAD'
+    it('Should notify an exclusion for http head method', async () => {
+        req.method = 'HEAD';
 
-    const result = await request(config, req)
+        const result = await request(config, req);
 
-    testExclusion(result)
-  })
+        testExclusion(result);
+    });
 
-  it('Should notify an exclusion and clear cache for http methods present in config.exclude.methods list', async () => {
-    req.method = 'POST'
+    it('Should notify an exclusion and clear cache for http methods present in config.exclude.methods list', async () => {
+        req.method = 'POST';
 
-    await store.setItem('https://httpbin.org/', res)
+        await store.setItem('https://httpbin.org/', res);
 
-    const result = await request(config, req)
+        const result = await request(config, req);
 
-    testExclusion(result)
+        testExclusion(result);
 
-    const length = await store.length()
+        const length = await store.length();
 
-    assert.strictEqual(length, 0)
-  })
+        assert.strictEqual(length, 0);
+    });
 
-  it('Should clear based on new invalidate function', async () => {
-    config.invalidate = async (cfg, req) => {
-      const method = req.method.toLowerCase()
-      const prefix = 'deleteme'
-      if (method === 'get') return
-      await cfg.store.iterate(async (_, key) => {
-        if (key.startsWith(prefix)) {
-          await config.store.removeItem(key)
-        }
-      })
+    it('Should clear based on new invalidate function', async () => {
+        config.invalidate = async (cfg, req) => {
+            const method = req.method.toLowerCase();
+            const prefix = 'deleteme';
+            if (method === 'get') return;
+            await cfg.store.iterate(async (_, key) => {
+                if (key.startsWith(prefix)) {
+                    await config.store.removeItem(key);
+                }
+            });
+        };
+        req.method = 'POST';
+        await store.setItem('deleteme', res);
+        await store.setItem('url', res);
+
+        await request(config, req);
+
+        const length = await store.length();
+
+        assert.strictEqual(length, 1);
+    });
+
+    // Helpers
+    function testExclusion ({ next, config }) {
+        assert.ok(isFunction(next));
+        assert.ok(config.excludeFromCache);
     }
-    req.method = 'POST'
-    await store.setItem('deleteme', res)
-    await store.setItem('url', res)
-
-    await request(config, req)
-
-    const length = await store.length()
-
-    assert.strictEqual(length, 1)
-  })
-
-  // Helpers
-  function testExclusion ({ next, config }) {
-    assert.ok(isFunction(next))
-    assert.ok(config.excludeFromCache)
-  }
-})
+});
