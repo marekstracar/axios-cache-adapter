@@ -1,5 +1,5 @@
 // Karma configuration
-const webpackConfig = require('./webpack.config.cjs');
+const webpackConfig = require('./webpack.config.js');
 
 process.env.CHROME_BIN = require('puppeteer').executablePath();
 

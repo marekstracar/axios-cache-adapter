@@ -1,5 +1,5 @@
-import { setupCache } from '../src/index.js';
-import Axios from 'axios';
+const { setupCache } = require('../dist/cache.node');
+const Axios = require('axios');
 
 // Create an `axios` instance with `axios-cache-adapter` pre-configured
 const cacheAdapter = setupCache({
