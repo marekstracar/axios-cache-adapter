@@ -1,4 +1,4 @@
-const { setupCache } = require('../dist/cache.node');
+const { setupCache } = require('../dist/index.cjs');
 const Axios = require('axios');
 
 // Create an `axios` instance with `axios-cache-adapter` pre-configured
