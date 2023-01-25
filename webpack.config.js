@@ -4,52 +4,23 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const cwd = process.cwd();
 
-// Base filenameTemplate and version variable to store what kind of version we'll be generating
-const filenameTemplate = 'index[version].js';
-const filenameParts = [''];
-
-// Start with empty list of plugins and externals and an undefined devtool
-const externals = {};
-
-let target = 'web';
-let entry = './src/index.js';
-
 // List external dependencies
-const dependencies = [
-    'axios'
+const externals = [
+    'axios',
+    'md5',
+    '@tusbar/cache-control'
 ];
 
-dependencies.forEach(dep => {
-    externals[dep] = {
-        umd: dep,
-        amd: dep,
-        commonjs: dep,
-        commonjs2: dep
-    };
-});
-
-if (process.env.NODE_BUILD_FOR === 'node') {
-    filenameParts.push('node');
-    target = 'node';
-    entry = './src/index.node.js';
-}
-
-// Check if we should make a minified version
-if (process.env.NODE_ENV === 'production') {
-    filenameParts.push('min');
-}
-
-// Generate actual filenameTemplate
-// index.js || index.min.js || index.node.js || index.node.min.js
-const filename = filenameTemplate.replace('[version]', filenameParts.join('.'));
-
 const webpackConfig = {
-    entry,
+    entry: {
+        'index.node': './src/index.node.js',
+        'index': './src/index.js',
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename,
+        filename: '[name].js',
     },
-    mode: 'production',
+    mode: process.env.NODE_ENV || 'development',
     module: {
         rules: [
             {
@@ -60,9 +31,7 @@ const webpackConfig = {
                     options: {
                         presets: [
                             ['@babel/preset-env', {
-                                targets: target === 'node'
-                                    ? {node: 'current'}
-                                    : {chrome: '58'}
+                                targets: {node: 'current', chrome: '58'}
                             }]
                         ]
                     }
@@ -72,7 +41,6 @@ const webpackConfig = {
     },
     externals,
     devtool: 'source-map',
-    target
 };
 
 // TEST CONFIG
@@ -85,13 +53,13 @@ const webpackTestingConfig = {
     resolve: {
         modules: ['node_modules', '.']
     },
-    mode: 'development',
+    mode: process.env.NODE_ENV || 'development',
     module: {
         rules: [
             // Transpile ES2015 to ES5
             {
                 test: /\.js$/,
-                exclude: /node_modules|\\utilities.spec\.js$/,
+                exclude: /(node_modules|\\utilities.spec\.js)$/,
                 use: [
                     {
                         loader: 'babel-loader',
@@ -112,12 +80,12 @@ const webpackTestingConfig = {
                     options: { esModules: true }
                 },
                 enforce: 'post',
-                exclude: /node_modules|\.spec\.js$/
+                exclude: /(node_modules|\.spec\.js)$/
             },
 
             // Load font files
             { test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/, loader: 'file-loader' },
-            { test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader' }
+            { test: /\.woff2?(\?v=\d\.\d\.\d)?$/, loader: 'url-loader' }
         ]
     },
     plugins: [
@@ -133,7 +101,6 @@ const webpackTestingConfig = {
         noInfo: true, // only errors & warns on hot reload
         port: 3000
     },
-    target: 'web',
     devtool: 'source-map'
 };
 
