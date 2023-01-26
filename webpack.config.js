@@ -13,7 +13,7 @@ const webpackNodeConfig = {
             type: 'commonjs'
         }
     },
-    mode: 'development',
+    mode: 'production',
     module: {
         rules: [
             {
@@ -48,7 +48,7 @@ const webpackBrowserConfig = {
             type: 'umd'
         }
     },
-    mode: 'development',
+    mode: 'production',
     module: {
         rules: [
             {
@@ -84,7 +84,7 @@ const webpackTestingConfig = {
     resolve: {
         modules: ['node_modules', '.']
     },
-    mode: process.env.NODE_ENV || 'development',
+    mode: 'development',
     module: {
         rules: [
             // Transpile ES2015 to ES5
