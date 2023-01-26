@@ -48,10 +48,7 @@
         "url": "https://github.com/marekstracar/axios-cache-adapter/issues"
     },
     "devDependencies": {
-        "@babel/core": "^7.1.2",
-        "@babel/polyfill": "^7.0.0",
         "@babel/preset-env": "^7.1.0",
-        "@marekstracar/axios-cache-adapter": "^2.8.2",
         "assert": "^2.0.0",
         "axios": "^0.20.0 || ^1.0.0",
         "babel-loader": "^8.0.4",

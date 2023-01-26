@@ -4,42 +4,38 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const cwd = process.cwd();
 
-// List external dependencies
-const externals = [
-    'axios',
-    'md5',
-    '@tusbar/cache-control'
-];
-
 const webpackConfig = {
-    entry: {
-        'index.node': './src/index.node.js',
-        'index': './src/index.js',
-    },
+    entry: path.resolve(__dirname, 'src') + '/index.node.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].js',
+        filename: 'index.node.js',
+        library: {
+            type: 'commonjs'
+        }
     },
-    mode: process.env.NODE_ENV || 'development',
+    mode: 'development',
     module: {
         rules: [
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
                 use: [{
                     loader: 'babel-loader',
                     options: {
-                        presets: [
-                            ['@babel/preset-env', {
-                                targets: {node: 'current', chrome: '58'}
-                            }]
-                        ]
+                        presets: ['@babel/preset-env'],
                     }
                 }]
             }
         ]
     },
-    externals,
+    target: 'node',
+    resolve: {
+        extensions: ['.js'],
+    },
+    externals: {
+        axios: 'axios',
+        md5: 'md5',
+        '@tusbar/cache-control': '@tusbar/cache-control'
+    },
     devtool: 'source-map',
 };
 
