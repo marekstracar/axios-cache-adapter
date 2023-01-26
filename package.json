@@ -20,7 +20,8 @@
         "/src",
         "/axios-cache-adapter.d.ts"
     ],
-    "main": "dist/index.js",
+    "main": "dist/index.node.js",
+    "browser": "dist/index.js",
     "types": "axios-cache-adapter.d.ts",
     "runkitExampleFilename": "examples/basic.js",
     "exclude": [
@@ -31,7 +32,7 @@
     "keywords": [
         "axios",
         "cache",
-        "xhr",
+        "adapter",
         "request"
     ],
     "scripts": {

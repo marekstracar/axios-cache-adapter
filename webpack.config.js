@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const cwd = process.cwd();
 
-const webpackConfig = {
+const webpackNodeConfig = {
     entry: path.resolve(__dirname, 'src') + '/index.node.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -28,6 +28,41 @@ const webpackConfig = {
         ]
     },
     target: 'node',
+    resolve: {
+        extensions: ['.js'],
+    },
+    externals: {
+        axios: 'axios',
+        md5: 'md5',
+        '@tusbar/cache-control': '@tusbar/cache-control'
+    },
+    devtool: 'source-map',
+};
+
+const webpackBrowserConfig = {
+    entry: path.resolve(__dirname, 'src') + '/index.js',
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'index.js',
+        library: {
+            type: 'umd'
+        }
+    },
+    mode: 'development',
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env'],
+                    }
+                }]
+            }
+        ]
+    },
+    target: 'web',
     resolve: {
         extensions: ['.js'],
     },
@@ -100,4 +135,4 @@ const webpackTestingConfig = {
     devtool: 'source-map'
 };
 
-module.exports = process.env.NODE_ENV === 'test' ? webpackTestingConfig : webpackConfig;
+module.exports = process.env.NODE_ENV === 'test' ? webpackTestingConfig : [webpackNodeConfig, webpackBrowserConfig];
