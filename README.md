@@ -31,17 +31,18 @@ import { setupCache } from '@marekstracar/axios-cache-adapter'
 
 // Create `axios-cache-adapter` instance
 const cache = setupCache({
-  maxAge: 15 * 60 * 1000
+  maxAge: 15 * 60 * 1000,
+  adapter: axios.defaults.adapter,
 })
 
 // Create `axios` instance passing the newly created `cache.adapter`
 const api = axios.create({
-  adapter: cache.adapter
+  baseURL: "https://httpbin.org"
 })
 
 // Send a GET request to some REST api
 api({
-  url: 'http://some-rest.api/url',
+  url: '/get?foo=bar',
   method: 'get'
 }).then(async (response) => {
   // Do something fantastic with response.data \o/
