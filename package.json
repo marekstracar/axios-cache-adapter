@@ -20,8 +20,8 @@
         "/src",
         "/axios-cache-adapter.d.ts"
     ],
-    "main": "dist/index.node.js",
-    "browser": "dist/index.js",
+    "main": "dist/cjs/index.js",
+    "browser": "dist/esm/index.js",
     "types": "axios-cache-adapter.d.ts",
     "runkitExampleFilename": "examples/basic.js",
     "exclude": [

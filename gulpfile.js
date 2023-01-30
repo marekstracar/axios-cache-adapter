@@ -5,6 +5,7 @@ const rollup = require('gulp-better-rollup');
 const sourcemaps = require('gulp-sourcemaps');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify-es').default;
+const Server = require('karma').Server;
 
 gulp.task('clean', function() {
     return rimraf('./dist');
@@ -52,6 +53,13 @@ gulp.task('transpile_cjs', function() {
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('dist/cjs'));
+});
+
+gulp.task('test', function (done) {
+    new Server({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true
+    }, done).start();
 });
 
 gulp.task('transpile', gulp.series('clean', gulp.parallel(gulp.series('transpile_esm', 'minify_esm'), gulp.series('transpile_cjs', 'minify_cjs'))) );
