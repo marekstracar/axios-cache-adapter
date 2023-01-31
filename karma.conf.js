@@ -4,7 +4,7 @@ const webpackConfig = require('./webpack.config.js');
 process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 // explained at http://mike-ward.net/2015/09/07/tips-on-setting-up-karma-testing-with-webpack/
-webpackConfig.entry = '';
+webpackConfig.entry = {};
 
 module.exports = function (config) {
     config.set({
@@ -18,6 +18,7 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
+            'test/global-variables.js',
             'test/main.js'
         ],
 

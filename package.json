@@ -39,7 +39,7 @@
         "clean": "rimraf dist",
         "lint": "eslint",
         "lint-fix": "eslint --fix src/**/*.js test/**/*.js",
-        "build": "npm run clean && webpack",
+        "build": "npm run clean && webpack && NODE_ENV=production webpack && NODE_BUILD_FOR=node webpack && NODE_ENV=production NODE_BUILD_FOR=node webpack",
         "test": "NODE_ENV=test karma start karma.conf.js",
         "watch": "NODE_WATCH=true npm test"
     },

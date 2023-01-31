@@ -79,7 +79,7 @@ const webpackTestingConfig = {
     entry: ['test/main.js'],
     output: {
         path: path.join(cwd, '.tmp'),
-        filename: 'main.js'
+        filename: '[name].js',
     },
     resolve: {
         modules: ['node_modules', '.']
@@ -95,11 +95,7 @@ const webpackTestingConfig = {
                     {
                         loader: 'babel-loader',
                         options: {
-                            presets: [
-                                ['@babel/preset-env', {
-                                    useBuiltIns: 'usage'
-                                }]
-                            ]
+                            presets: ['@babel/preset-env']
                         }
                     }
                 ]
