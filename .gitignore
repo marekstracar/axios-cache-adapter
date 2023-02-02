@@ -3,4 +3,5 @@ coverage
 package-lock.json
 .vscode
 .idea
+.tmp
 dist

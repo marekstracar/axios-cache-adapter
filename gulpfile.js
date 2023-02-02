@@ -11,48 +11,26 @@ gulp.task('clean', function() {
     return rimraf('./dist');
 });
 
-gulp.task('minify_cjs', function () {
-    return gulp.src('dist/cjs/index.js')
+gulp.task('minify', function () {
+    return gulp.src('dist/index.js')
         .pipe(uglify())
         .pipe(rename('index.min.js'))
-        .pipe(gulp.dest('dist/cjs'));
+        .pipe(gulp.dest('dist'));
 });
 
-gulp.task('minify_esm', function () {
-    return gulp.src('dist/esm/index.js')
-        .pipe(uglify())
-        .pipe(rename('index.min.js'))
-        .pipe(gulp.dest('dist/esm'));
-});
-
-gulp.task('transpile_esm', function() {
+gulp.task('transpile', function() {
     return gulp.src('src/index.js')
         .pipe(rollup({
             plugins: [babel()],
             external: ['axios', 'md5', '@tusbar/cache-control'],
         }, {
-            name: 'index.js',
-            format: 'esm',
-            sourcemaps: true,
-        }))
-        .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('dist/esm'));
-});
-
-gulp.task('transpile_cjs', function() {
-    return gulp.src('src/index.node.js')
-        .pipe(rollup({
-            plugins: [babel()],
-            external: ['axios', 'md5', '@tusbar/cache-control'],
-        }, {
-            format: 'cjs',
+            format: 'umd',
             sourcemaps: true,
         }))
         .pipe(rename('index.js'))
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('dist/cjs'));
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('test', function (done) {
@@ -62,4 +40,4 @@ gulp.task('test', function (done) {
     }, done).start();
 });
 
-gulp.task('transpile', gulp.series('clean', gulp.parallel(gulp.series('transpile_esm', 'minify_esm'), gulp.series('transpile_cjs', 'minify_cjs'))) );
+gulp.task('build', gulp.series('clean', 'transpile', 'minify'));

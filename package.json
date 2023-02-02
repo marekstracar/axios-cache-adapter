@@ -20,8 +20,7 @@
         "/src",
         "/axios-cache-adapter.d.ts"
     ],
-    "main": "dist/cjs/index.js",
-    "browser": "dist/esm/index.js",
+    "main": "dist/index.js",
     "types": "axios-cache-adapter.d.ts",
     "runkitExampleFilename": "examples/basic.js",
     "exclude": [
@@ -37,9 +36,9 @@
     ],
     "scripts": {
         "clean": "rimraf dist",
-        "lint": "eslint",
+        "lint": "eslint src/**/*.js",
         "lint-fix": "eslint --fix src/**/*.js test/**/*.js",
-        "build": "npm run clean && webpack && NODE_ENV=production webpack && NODE_BUILD_FOR=node webpack && NODE_ENV=production NODE_BUILD_FOR=node webpack",
+        "build": "gulp build",
         "test": "NODE_ENV=test karma start karma.conf.js",
         "watch": "NODE_WATCH=true npm test"
     },

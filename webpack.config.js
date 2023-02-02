@@ -128,7 +128,12 @@ const webpackTestingConfig = {
         noInfo: true, // only errors & warns on hot reload
         port: 3000
     },
-    devtool: 'source-map'
+    devtool: 'source-map',
+    externals: {
+        axios: 'axios',
+        md5: 'md5',
+        '@tusbar/cache-control': '@tusbar/cache-control'
+    }
 };
 
 module.exports = process.env.NODE_ENV === 'test' ? webpackTestingConfig : [webpackNodeConfig, webpackBrowserConfig];
