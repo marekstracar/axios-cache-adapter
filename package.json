@@ -1,6 +1,6 @@
 {
     "name": "@marekstracar/axios-cache-adapter",
-    "version": "2.9.0",
+    "version": "2.9.1",
     "description": "Caching adapter for stable version of Axios (1.x)",
     "homepage": "https://github.com/marekstracar/axios-cache-adapter",
     "author": {
