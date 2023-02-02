@@ -30,7 +30,7 @@ const defaults = {
             const { method, url, ...rest } = requestData;
             const { baseURL } = config;
 
-            const api = Axios.create({...rest, baseURL, adapter: ['http', 'xhr']});
+            const api = Axios.create({...rest, baseURL, adapter: Axios.defaults.adapter});
 
             return api[method](url);
         }

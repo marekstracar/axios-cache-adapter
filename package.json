@@ -1,6 +1,6 @@
 {
     "name": "@marekstracar/axios-cache-adapter",
-    "version": "2.9.3",
+    "version": "2.9.4",
     "description": "Caching adapter for stable version of Axios (1.x)",
     "homepage": "https://github.com/marekstracar/axios-cache-adapter",
     "author": {
@@ -50,7 +50,6 @@
     "devDependencies": {
         "@babel/preset-env": "^7.1.0",
         "assert": "^2.0.0",
-        "axios": "^0.20.0 || ^1.0.0",
         "babel-loader": "^8.0.4",
         "eslint": "^8.32.0",
         "gulp": "^4.0.2",
@@ -83,6 +82,7 @@
     },
     "dependencies": {
         "@tusbar/cache-control": "^0.6.1",
+        "axios": "^0.20.0 || ^1.0.0",
         "md5": "^2.2.1"
     },
     "peerDependencies": {
