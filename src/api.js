@@ -114,4 +114,3 @@ function setup (config = {}) {
 }
 
 export { setup, setupCache, serializeQuery };
-export default { setup, setupCache, serializeQuery };

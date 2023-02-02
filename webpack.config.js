@@ -4,116 +4,82 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const cwd = process.cwd();
 
-// Base filename and version variable to store what kind of version we'll be generating
-let filename = 'cache[version].js';
-const version = [''];
-
-// Start with empty list of plugins and externals and an undefined devtool
-const plugins = [];
-const externals = {};
-
-let mode = 'development';
-let target = 'web';
-let entry = './src/index.js';
-
-// List external dependencies
-const dependencies = [
-    'axios'
-];
-
-dependencies.forEach(dep => {
-    externals[dep] = {
-        umd: dep,
-        amd: dep,
-        commonjs: dep,
-        commonjs2: dep
-    };
-});
-
-if (process.env.NODE_BUILD_FOR === 'node') {
-    version.push('node');
-    target = 'node';
-    entry = './src/index.node.js';
-}
-
-const polyfillExclusions = [
-    'es6.array.filter',
-    'es6.array.for-each',
-    'es6.array.index-of',
-    'es6.array.is-array',
-    'es6.array.map',
-    'es6.array.some',
-    'es6.date.now',
-    'es6.date.to-string',
-    'es6.number.constructor',
-    'es6.object.define-properties',
-    'es6.object.define-property',
-    'es6.object.keys',
-    'es6.promise',
-    'es6.regexp.match',
-    'es6.regexp.to-string',
-    'es6.string.iterator',
-    'es6.string.trim',
-    'web.dom.iterable'
-];
-
-// Check if we should make a minified version
-if (process.env.NODE_ENV === 'production') {
-    version.push('min');
-
-    mode = 'production';
-}
-
-// Generate actual filename
-// cache.js || cache.min.js || cache.node.js || cache.node.min.js
-filename = filename.replace('[version]', version.join('.'));
-
-// Webpack config
-const build = {
-    entry,
+const webpackNodeConfig = {
+    entry: path.resolve(__dirname, 'src') + '/index.node.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename,
-        library: '@marekstracar/axiosCacheAdapter',
-        libraryTarget: 'umd'
+        filename: 'index.node.js',
+        library: {
+            type: 'commonjs'
+        }
     },
-    mode,
+    mode: 'production',
     module: {
         rules: [
             {
                 test: /\.js$/,
-                // exclude: /node_modules/,
-                include: [
-                    path.resolve(__dirname, 'src'),
-                    path.resolve(__dirname, 'node_modules/cache-control-esm')
-                ],
                 use: [{
                     loader: 'babel-loader',
                     options: {
-                        presets: [
-                            ['@babel/preset-env', {
-                                useBuiltIns: 'usage',
-                                exclude: polyfillExclusions,
-                                include: ['transform-classes', 'proposal-object-rest-spread']
-                            }]
-                        ]
+                        presets: ['@babel/preset-env'],
                     }
                 }]
             }
         ]
     },
-    externals,
-    plugins,
+    target: 'node',
+    resolve: {
+        extensions: ['.js'],
+    },
+    externals: {
+        axios: 'axios',
+        md5: 'md5',
+        '@tusbar/cache-control': '@tusbar/cache-control'
+    },
     devtool: 'source-map',
-    target
+};
+
+const webpackBrowserConfig = {
+    entry: path.resolve(__dirname, 'src') + '/index.js',
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'index.js',
+        library: {
+            type: 'umd'
+        }
+    },
+    mode: 'production',
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env'],
+                    }
+                }]
+            }
+        ]
+    },
+    target: 'web',
+    resolve: {
+        extensions: ['.js'],
+    },
+    externals: {
+        axios: 'axios',
+        md5: 'md5',
+        '@tusbar/cache-control': '@tusbar/cache-control'
+    },
+    devtool: 'source-map',
 };
 
 // TEST CONFIG
-const test = {
+const webpackTestingConfig = {
     entry: ['test/main.js'],
     output: {
         path: path.join(cwd, '.tmp'),
-        filename: 'main.js'
+        filename: '[name].js',
     },
     resolve: {
         modules: ['node_modules', '.']
@@ -124,16 +90,12 @@ const test = {
             // Transpile ES2015 to ES5
             {
                 test: /\.js$/,
-                exclude: /node_modules|\utilities.spec\.js$/,
+                exclude: /(node_modules|\\utilities.spec\.js)$/,
                 use: [
                     {
                         loader: 'babel-loader',
                         options: {
-                            presets: [
-                                ['@babel/preset-env', {
-                                    useBuiltIns: 'usage'
-                                }]
-                            ]
+                            presets: ['@babel/preset-env']
                         }
                     }
                 ]
@@ -145,12 +107,12 @@ const test = {
                     options: { esModules: true }
                 },
                 enforce: 'post',
-                exclude: /node_modules|\.spec\.js$/
+                exclude: /(node_modules|\.spec\.js)$/
             },
 
             // Load font files
             { test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/, loader: 'file-loader' },
-            { test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader' }
+            { test: /\.woff2?(\?v=\d\.\d\.\d)?$/, loader: 'url-loader' }
         ]
     },
     plugins: [
@@ -166,8 +128,12 @@ const test = {
         noInfo: true, // only errors & warns on hot reload
         port: 3000
     },
-    target: 'web',
-    devtool: 'source-map'
+    devtool: 'source-map',
+    externals: {
+        axios: 'axios',
+        md5: 'md5',
+        '@tusbar/cache-control': '@tusbar/cache-control'
+    }
 };
 
-module.exports = process.env.NODE_ENV === 'test' ? test : build;
+module.exports = process.env.NODE_ENV === 'test' ? webpackTestingConfig : [webpackNodeConfig, webpackBrowserConfig];
