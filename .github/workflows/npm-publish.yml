@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  build:
+  dependency-installation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,7 +17,15 @@ jobs:
         with:
           node-version: 16
       - name: install npm
-        run: sudo npm install
+      - run: sudo npm install
+  build:
+    needs: dependency-installation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
       - run: npm run build
 
   publish-npm:
@@ -25,8 +33,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: install npm
-        run: sudo npm install
       - uses: actions/setup-node@v3
         with:
           node-version: 16
