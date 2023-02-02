@@ -8,27 +8,21 @@ on:
     branches:
       - master
 
-jobs:
-  dependency-installation:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - run: npm install
+jobs:      
   build:
-    needs: dependency-installation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm run build
+      - name: Npm packages installation
+        run: npm install
+      - name: Building packages
+        run: npm run build
 
   publish-npm:
-    needs: build
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
